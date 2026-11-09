@@ -1,0 +1,14 @@
+# Build output
+/nightexpress
+/nightexpress.exe
+/bin/
+/dist/
+*.test
+*.out
+*.prof
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

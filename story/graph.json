@@ -1,0 +1,445 @@
+{
+  "start": "p_departure",
+  "clock_start": "22:00",
+  "deadline": "06:00",
+  "deadline_node": "arrival",
+  "initial": {"trust": 3, "duty": 5, "suspicion": 1, "money": 0, "evidence": 0},
+  "key_clue_goal": 3,
+  "clues": [
+    {"flag": "window_latch", "key": false},
+    {"flag": "briefcase_decoy", "key": true},
+    {"flag": "torn_ticket", "key": false},
+    {"flag": "coal_dust", "key": false},
+    {"flag": "rudin_telegram", "key": true},
+    {"flag": "gena_payment", "key": true},
+    {"flag": "sherzod_witness", "key": true},
+    {"flag": "lola_photo", "key": false},
+    {"flag": "hen_feather_map", "key": false},
+    {"flag": "baggage_key", "key": false}
+  ],
+  "notes": [
+    {"flag": "met_rudin"}, {"flag": "note_ministry"}, {"flag": "note_baggage"}, {"flag": "chief_informed"},
+    {"flag": "read_orders"}, {"flag": "rudin_talked"}, {"flag": "rudin_water"}, {"flag": "lola_talked"},
+    {"flag": "gena_talked"}, {"flag": "gena_cards"}, {"flag": "halima_talked"}, {"flag": "bahodir_talked"},
+    {"flag": "sherzod_heard"}, {"flag": "saw_searcher"}, {"flag": "prof_told"}, {"flag": "prof_knows_lola"},
+    {"flag": "gena_ally"}, {"flag": "hid_staff"}, {"flag": "hid_halima"}, {"flag": "reunited"},
+    {"flag": "map_returned"}, {"flag": "took_bribe"}, {"flag": "promised_rudin"}, {"flag": "prof_safe"},
+    {"flag": "prof_taken"}
+  ],
+  "endings": [
+    {"id": "E1", "node": "e1_daybreak"},
+    {"id": "E2", "node": "e2_quiet"},
+    {"id": "E3", "node": "e3_deal"},
+    {"id": "E4", "node": "e4_wrong"},
+    {"id": "E5", "node": "e5_junction"},
+    {"id": "E6", "node": "e6_rails"},
+    {"id": "E7", "node": "e7_relieved"},
+    {"id": "E8", "node": "e8_keeper"}
+  ],
+  "events": [
+    {"id": "duty_zero", "at": "22:00", "when": {"stat": "duty", "op": "<=", "value": 0}, "target": "e7_relieved"},
+    {"id": "rudin_attack", "at": "22:00", "when": {"stat": "suspicion", "op": ">=", "value": 10}, "target": "ev_rudin_attack"},
+    {"id": "junction", "at": "04:00", "target": "ev_junction"},
+    {"id": "inspection", "at": "05:00", "target": "ev_inspection"},
+    {"id": "chief_round", "at": "23:00", "until": "01:00", "target": "ev_chief_round"},
+    {"id": "tea_late", "at": "23:30", "when": {"not_flag": "tea_done"}, "target": "ev_tea_late"},
+    {"id": "tickets_late", "at": "00:30", "when": {"not_flag": "tickets_done"}, "target": "ev_tickets_late"},
+    {"id": "lights", "at": "01:30", "until": "02:30", "target": "ev_lights"},
+    {"id": "gena_cards", "at": "23:45", "until": "01:30", "when": {"not_flag": "gena_payment"}, "target": "ev_gena_cards"},
+    {"id": "hen_restless", "at": "02:30", "until": "03:45",
+     "when": {"all": [{"flag": "halima_talked"}, {"not_flag": "hen_feather_map"}, {"stat": "trust", "op": ">=", "value": 4}]},
+     "target": "ev_hen_restless"},
+    {"id": "rudin_chat", "at": "22:50", "until": "04:00", "when": {"stat": "suspicion", "op": ">=", "value": 5}, "target": "ev_rudin_chat"},
+    {"id": "rudin_threat", "at": "22:50", "until": "04:00", "when": {"stat": "suspicion", "op": ">=", "value": 7}, "target": "ev_rudin_threat"}
+  ],
+  "nodes": [
+    {"id": "p_departure", "kind": "scene", "text_key": "n.p_departure", "choices": [
+      {"id": "help_halima", "label_key": "c.p_departure.help_halima", "target": "p_halima", "cost_min": 10,
+       "effects": [{"set": "halima_kind"}, {"stat": "trust", "add": 1}]},
+      {"id": "help_lola", "label_key": "c.p_departure.help_lola", "target": "p_lola", "cost_min": 10,
+       "effects": [{"set": "lola_kind"}, {"stat": "trust", "add": 1}]},
+      {"id": "check_grey", "label_key": "c.p_departure.check_grey", "target": "p_rudin", "cost_min": 10,
+       "effects": [{"set": "met_rudin"}]}
+    ]},
+    {"id": "p_halima", "kind": "scene", "text_key": "n.p_halima", "choices": [
+      {"id": "next", "label_key": "c.p_halima.next", "target": "p_chief", "cost_min": 10}
+    ]},
+    {"id": "p_lola", "kind": "scene", "text_key": "n.p_lola", "choices": [
+      {"id": "next", "label_key": "c.p_lola.next", "target": "p_chief", "cost_min": 10}
+    ]},
+    {"id": "p_rudin", "kind": "scene", "text_key": "n.p_rudin", "choices": [
+      {"id": "next", "label_key": "c.p_rudin.next", "target": "p_chief", "cost_min": 10}
+    ]},
+    {"id": "p_chief", "kind": "scene", "text_key": "n.p_chief", "choices": [
+      {"id": "yes", "label_key": "c.p_chief.yes", "target": "p_professor", "cost_min": 10,
+       "effects": [{"stat": "duty", "add": 1}]},
+      {"id": "ask", "label_key": "c.p_chief.ask", "target": "p_professor", "cost_min": 10,
+       "effects": [{"set": "note_ministry"}], "result_key": "r.p_chief.ask"}
+    ]},
+    {"id": "p_professor", "kind": "scene", "text_key": "n.p_professor", "choices": [
+      {"id": "goodnight", "label_key": "c.p_professor.goodnight", "target": "d_knock", "cost_min": 10},
+      {"id": "ask_baggage", "label_key": "c.p_professor.ask_baggage", "target": "d_knock", "cost_min": 10,
+       "effects": [{"set": "note_baggage"}], "result_key": "r.p_professor.ask_baggage"}
+    ]},
+    {"id": "d_knock", "kind": "scene", "text_key": "n.d_knock", "choices": [
+      {"id": "go", "label_key": "c.d_knock.go", "target": "d_comp4", "cost_min": 10}
+    ]},
+    {"id": "d_comp4", "kind": "scene", "text_key": "n.d_comp4", "choices": [
+      {"id": "latch", "label_key": "c.window", "target": "d_comp4", "cost_min": 10,
+       "requires": {"not_flag": "window_latch"}, "effects": [{"set": "window_latch"}], "result_key": "r.window"},
+      {"id": "briefcase", "label_key": "c.briefcase", "target": "d_comp4", "cost_min": 10,
+       "requires": {"not_flag": "briefcase_decoy"},
+       "effects": [{"set": "briefcase_decoy"}, {"stat": "evidence", "add": 1}], "result_key": "r.briefcase"},
+      {"id": "calm", "label_key": "c.d_comp4.calm", "target": "d_comp4", "cost_min": 10,
+       "requires": {"not_flag": "lola_calmed"}, "effects": [{"set": "lola_calmed"}, {"stat": "trust", "add": 1}],
+       "result_key": "r.d_comp4.calm"},
+      {"id": "report", "label_key": "c.d_comp4.report", "target": "d_chief_report", "cost_min": 10,
+       "requires": {"not_flag": "chief_informed"},
+       "effects": [{"set": "chief_informed"}, {"stat": "duty", "add": 1}, {"stat": "suspicion", "add": 2}]},
+      {"id": "quiet", "label_key": "c.d_comp4.quiet", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "d_chief_report", "kind": "scene", "text_key": "n.d_chief_report", "choices": [
+      {"id": "back", "label_key": "c.d_chief_report.back", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "corridor", "kind": "hub", "text_key": "n.corridor",
+     "ambient": ["amb.1", "amb.2", "amb.3", "amb.4", "amb.5", "amb.6", "amb.7", "amb.8"],
+     "variants": [
+       {"when": {"visits": "corridor", "op": "<=", "value": 1}, "text_key": "n.corridor.first"},
+       {"when": {"flag": "prof_safe"}, "text_key": "n.corridor.dawn_safe"},
+       {"when": {"flag": "prof_taken"}, "text_key": "n.corridor.dawn_taken"},
+       {"when": {"after": "01:00"}, "text_key": "n.corridor.night"}
+     ],
+     "choices": [
+      {"id": "tea", "label_key": "c.corridor.tea", "target": "duty_tea", "cost_min": 20,
+       "requires": {"all": [{"not_flag": "tea_done"}, {"before": "23:30"}]},
+       "effects": [{"set": "tea_done"}, {"stat": "duty", "add": 1}, {"stat": "suspicion", "add": -1}]},
+      {"id": "tickets", "label_key": "c.corridor.tickets", "target": "duty_tickets", "cost_min": 20,
+       "requires": {"all": [{"not_flag": "tickets_done"}, {"before": "00:30"}]},
+       "effects": [{"set": "tickets_done"}, {"stat": "duty", "add": 1}]},
+      {"id": "c2", "label_key": "c.corridor.c2", "target": "c2", "cost_min": 10},
+      {"id": "c4", "label_key": "c.corridor.c4", "target": "c4", "cost_min": 10},
+      {"id": "c5", "label_key": "c.corridor.c5", "target": "c5", "cost_min": 10},
+      {"id": "c6", "label_key": "c.corridor.c6", "target": "c6", "cost_min": 10},
+      {"id": "staff", "label_key": "c.corridor.staff", "target": "staff", "cost_min": 10},
+      {"id": "dining", "label_key": "c.corridor.dining", "target": "dining", "cost_min": 10},
+      {"id": "rear", "label_key": "c.corridor.rear", "target": "rear", "cost_min": 10},
+      {"id": "wait", "label_key": "c.corridor.wait", "target": "corridor", "cost_min": 30, "result_key": "r.corridor.wait"}
+    ]},
+    {"id": "c2", "kind": "hub", "text_key": "n.c2",
+     "variants": [
+       {"when": {"flag": "prof_taken"}, "text_key": "n.c2.gone"},
+       {"when": {"all": [{"after": "23:30"}, {"before": "00:45"}]}, "text_key": "n.c2.empty"},
+       {"when": {"flag": "prof_safe"}, "text_key": "n.c2.dawn"}
+     ],
+     "choices": [
+      {"id": "talk", "label_key": "c.c2.talk", "target": "c2", "cost_min": 10,
+       "requires": {"all": [{"not_flag": "prof_taken"}, {"not": {"all": [{"after": "23:30"}, {"before": "00:45"}]}}]},
+       "effects": [{"set": "rudin_talked"}, {"stat": "suspicion", "add": 1}], "result_key": "r.c2.talk"},
+      {"id": "search", "label_key": "c.c2.search", "target": "c2_search", "cost_min": 20,
+       "requires": {"all": [{"after": "23:30"}, {"before": "00:45"}, {"not_flag": "rudin_telegram"}]}},
+      {"id": "back", "label_key": "c.back", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "c2_search", "kind": "scene", "text_key": "n.c2_search",
+     "on_enter": [{"set": "rudin_telegram"}, {"stat": "evidence", "add": 1}], "choices": [
+      {"id": "copy", "label_key": "c.c2_search.copy", "target": "c2", "cost_min": 10, "result_key": "r.c2_search.copy"},
+      {"id": "pocket", "label_key": "c.c2_search.pocket", "target": "c2", "cost_min": 10,
+       "effects": [{"stat": "suspicion", "add": 2}], "result_key": "r.c2_search.pocket"}
+    ]},
+    {"id": "c4", "kind": "hub", "text_key": "n.c4",
+     "variants": [
+       {"when": {"flag": "reunited"}, "text_key": "n.c4.reunited"},
+       {"when": {"flag": "prof_taken"}, "text_key": "n.c4.taken"},
+       {"when": {"after": "01:30"}, "text_key": "n.c4.late"}
+     ],
+     "choices": [
+      {"id": "talk_open", "label_key": "c.c4.talk", "target": "c4", "cost_min": 10,
+       "requires": {"all": [{"not_flag": "lola_photo"}, {"stat": "trust", "op": ">=", "value": 5}]},
+       "effects": [{"set": "lola_photo"}, {"set": "lola_talked"}, {"stat": "trust", "add": 1}], "result_key": "r.c4.photo"},
+      {"id": "talk_first", "label_key": "c.c4.talk", "target": "c4", "cost_min": 10,
+       "requires": {"all": [{"not_flag": "lola_talked"}, {"not_flag": "lola_photo"}, {"stat": "trust", "op": "<", "value": 5}]},
+       "effects": [{"set": "lola_talked"}, {"stat": "trust", "add": 1}], "result_key": "r.c4.talk"},
+      {"id": "talk_again", "label_key": "c.c4.talk", "target": "c4", "cost_min": 10,
+       "requires": {"all": [{"flag": "lola_talked"}, {"not_flag": "lola_photo"}, {"stat": "trust", "op": "<", "value": 5}]},
+       "result_key": "r.c4.photo_no"},
+      {"id": "window", "label_key": "c.window", "target": "c4", "cost_min": 10,
+       "effects": [{"set": "window_latch"}], "result_key": "r.window"},
+      {"id": "briefcase", "label_key": "c.briefcase", "target": "c4", "cost_min": 10,
+       "requires": {"all": [{"before": "01:30"}, {"not_flag": "briefcase_decoy"}]},
+       "effects": [{"set": "briefcase_decoy"}, {"stat": "evidence", "add": 1}], "result_key": "r.briefcase"},
+      {"id": "fetch", "label_key": "c.c4.fetch", "target": "reunion", "cost_min": 20,
+       "requires": {"all": [{"flag": "prof_knows_lola"}, {"not_flag": "reunited"}, {"not_flag": "prof_taken"}]}},
+      {"id": "back", "label_key": "c.back", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "c5", "kind": "hub", "text_key": "n.c5",
+     "variants": [{"when": {"flag": "gena_ally"}, "text_key": "n.c5.ally"}],
+     "choices": [
+      {"id": "talk", "label_key": "c.c5.talk", "target": "c5", "cost_min": 10,
+       "requires": {"all": [{"not_flag": "gena_payment"}, {"not_flag": "gena_cards"}]},
+       "effects": [{"set": "gena_talked"}], "result_key": "r.c5.talk"},
+      {"id": "confront", "label_key": "c.c5.confront", "target": "gena_confront", "cost_min": 10,
+       "requires": {"all": [{"flag": "gena_cards"}, {"not_flag": "gena_payment"}]}, "effects": [{"set": "gena_talked"}]},
+      {"id": "ally", "label_key": "c.ally", "target": "c5", "cost_min": 10,
+       "requires": {"all": [{"flag": "gena_payment"}, {"not_flag": "gena_ally"}, {"stat": "trust", "op": ">=", "value": 5}]},
+       "effects": [{"set": "gena_ally"}], "result_key": "r.ally"},
+      {"id": "ally_no", "label_key": "c.ally", "target": "c5", "cost_min": 10,
+       "requires": {"all": [{"flag": "gena_payment"}, {"not_flag": "gena_ally"}, {"stat": "trust", "op": "<", "value": 5}]},
+       "result_key": "r.ally_no"},
+      {"id": "back", "label_key": "c.back", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "gena_confront", "kind": "scene", "text_key": "n.gena_confront",
+     "on_enter": [{"set": "gena_payment"}, {"stat": "evidence", "add": 1}], "choices": [
+      {"id": "ally", "label_key": "c.ally", "target": "c5", "cost_min": 10,
+       "requires": {"stat": "trust", "op": ">=", "value": 5}, "effects": [{"set": "gena_ally"}], "result_key": "r.ally"},
+      {"id": "leave", "label_key": "c.gena_confront.leave", "target": "c5", "cost_min": 10}
+    ]},
+    {"id": "c6", "kind": "hub", "text_key": "n.c6",
+     "variants": [{"when": {"all": [{"flag": "hid_halima"}, {"not_flag": "prof_taken"}]}, "text_key": "n.c6.hiding"}],
+     "choices": [
+      {"id": "talk", "label_key": "c.c6.talk", "target": "c6", "cost_min": 10,
+       "requires": {"not_flag": "halima_talked"}, "effects": [{"set": "halima_talked"}, {"stat": "trust", "add": 1}],
+       "result_key": "r.c6.talk"},
+      {"id": "hen", "label_key": "c.c6.hen", "target": "halima_basket", "cost_min": 10,
+       "requires": {"all": [{"flag": "halima_talked"}, {"not_flag": "hen_feather_map"},
+                            {"any": [{"flag": "halima_kind"}, {"stat": "trust", "op": ">=", "value": 6}]}]}},
+      {"id": "hen_no", "label_key": "c.c6.hen", "target": "c6", "cost_min": 10,
+       "requires": {"all": [{"flag": "halima_talked"}, {"not_flag": "hen_feather_map"}, {"not_flag": "halima_kind"},
+                            {"stat": "trust", "op": "<", "value": 6}]},
+       "result_key": "r.c6.hen_no"},
+      {"id": "back", "label_key": "c.back", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "halima_basket", "kind": "scene", "text_key": "n.halima_basket", "on_enter": [{"set": "hen_feather_map"}], "choices": [
+      {"id": "keep", "label_key": "c.halima_basket.keep", "target": "c6", "cost_min": 10}
+    ]},
+    {"id": "staff", "kind": "hub", "text_key": "n.staff",
+     "variants": [{"when": {"all": [{"flag": "hid_staff"}, {"not_flag": "prof_taken"}]}, "text_key": "n.staff.hiding"}],
+     "choices": [
+      {"id": "orders", "label_key": "c.staff.orders", "target": "staff", "cost_min": 10,
+       "effects": [{"set": "read_orders"}], "result_key": "r.staff.orders"},
+      {"id": "sleep", "label_key": "c.staff.sleep", "target": "corridor", "cost_min": 40,
+       "effects": [{"stat": "duty", "add": -2}], "result_key": "r.staff.sleep"},
+      {"id": "back", "label_key": "c.back", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "dining", "kind": "hub", "text_key": "n.dining",
+     "variants": [
+       {"when": {"after": "01:00"}, "text_key": "n.dining.closed"},
+       {"when": {"after": "23:30"}, "text_key": "n.dining.rudin"}
+     ],
+     "choices": [
+      {"id": "chat", "label_key": "c.dining.chat", "target": "dining", "cost_min": 10,
+       "requires": {"all": [{"before": "01:00"}, {"not_flag": "bahodir_talked"}]},
+       "effects": [{"set": "bahodir_talked"}], "result_key": "r.dining.chat"},
+      {"id": "key", "label_key": "c.dining.key", "target": "dining", "cost_min": 10,
+       "requires": {"all": [{"before": "01:00"}, {"flag": "bahodir_talked"}, {"not_flag": "baggage_key"},
+                            {"stat": "trust", "op": ">=", "value": 5}]},
+       "effects": [{"set": "baggage_key"}], "result_key": "r.dining.key"},
+      {"id": "key_no", "label_key": "c.dining.key", "target": "dining", "cost_min": 10,
+       "requires": {"all": [{"before": "01:00"}, {"flag": "bahodir_talked"}, {"not_flag": "baggage_key"},
+                            {"stat": "trust", "op": "<", "value": 5}]},
+       "result_key": "r.dining.key_no"},
+      {"id": "back", "label_key": "c.back", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "rear", "kind": "hub", "text_key": "n.rear", "choices": [
+      {"id": "coal", "label_key": "c.rear.coal", "target": "rear", "cost_min": 20,
+       "requires": {"not_flag": "coal_done"},
+       "effects": [{"set": "coal_done"}, {"set": "coal_dust"}, {"stat": "duty", "add": 1}], "result_key": "r.rear.coal"},
+      {"id": "listen_bread", "label_key": "c.rear.listen", "target": "sherzod", "cost_min": 20,
+       "requires": {"all": [{"flag": "bahodir_talked"}, {"not_flag": "sherzod_witness"}]}},
+      {"id": "listen", "label_key": "c.rear.listen", "target": "rear", "cost_min": 10,
+       "requires": {"all": [{"not_flag": "bahodir_talked"}, {"not_flag": "sherzod_witness"}]},
+       "effects": [{"set": "sherzod_heard"}], "result_key": "r.rear.listen"},
+      {"id": "open", "label_key": "c.rear.open", "target": "baggage", "cost_min": 10,
+       "requires": {"all": [{"flag": "baggage_key"}, {"not_flag": "prof_found"}]}},
+      {"id": "visit", "label_key": "c.rear.visit", "target": "baggage", "cost_min": 10,
+       "requires": {"all": [{"flag": "prof_found"}, {"not_flag": "hid_staff"}, {"not_flag": "hid_halima"},
+                            {"not_flag": "prof_taken"}]}},
+      {"id": "back", "label_key": "c.back", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "sherzod", "kind": "scene", "text_key": "n.sherzod",
+     "on_enter": [{"set": "sherzod_witness"}, {"stat": "evidence", "add": 1}, {"stat": "trust", "add": 1}], "choices": [
+      {"id": "thank", "label_key": "c.sherzod.thank", "target": "rear", "cost_min": 10, "result_key": "r.sherzod.thank"}
+    ]},
+    {"id": "baggage", "kind": "scene", "text_key": "n.baggage", "on_enter": [{"set": "prof_found"}],
+     "variants": [{"when": {"visits": "baggage", "op": ">=", "value": 2}, "text_key": "n.baggage.again"}],
+     "choices": [
+      {"id": "ask", "label_key": "c.baggage.ask", "target": "prof_talk", "cost_min": 10},
+      {"id": "tell_lola", "label_key": "c.baggage.tell_lola", "target": "baggage", "cost_min": 10,
+       "requires": {"all": [{"flag": "lola_photo"}, {"not_flag": "prof_knows_lola"}]},
+       "effects": [{"set": "prof_knows_lola"}], "result_key": "r.baggage.tell_lola"},
+      {"id": "give_map", "label_key": "c.baggage.give_map", "target": "baggage", "cost_min": 10,
+       "requires": {"all": [{"flag": "hen_feather_map"}, {"not_flag": "map_returned"}]},
+       "effects": [{"set": "map_returned"}, {"stat": "trust", "add": 1}], "result_key": "r.baggage.give_map"},
+      {"id": "hide_staff", "label_key": "c.baggage.hide_staff", "target": "corridor", "cost_min": 20,
+       "requires": {"not_flag": "prof_safe"},
+       "effects": [{"set": "hid_staff"}, {"stat": "suspicion", "add": 1}], "result_key": "r.baggage.hide_staff"},
+      {"id": "hide_halima", "label_key": "c.baggage.hide_halima", "target": "corridor", "cost_min": 20,
+       "requires": {"all": [{"flag": "hen_feather_map"}, {"not_flag": "prof_safe"}]},
+       "effects": [{"set": "hid_halima"}], "result_key": "r.baggage.hide_halima"},
+      {"id": "leave", "label_key": "c.baggage.leave", "target": "corridor", "cost_min": 10, "result_key": "r.baggage.leave"}
+    ]},
+    {"id": "prof_talk", "kind": "scene", "text_key": "n.prof_talk", "on_enter": [{"set": "prof_told"}], "choices": [
+      {"id": "back", "label_key": "c.prof_talk.back", "target": "baggage", "cost_min": 10}
+    ]},
+    {"id": "reunion", "kind": "scene", "text_key": "n.reunion",
+     "on_enter": [{"set": "reunited"}, {"stat": "trust", "add": 1}], "choices": [
+      {"id": "leave", "label_key": "c.reunion.leave", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "duty_tea", "kind": "scene", "text_key": "n.duty_tea", "choices": [
+      {"id": "next", "label_key": "c.duty_tea.next", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "duty_tickets", "kind": "scene", "text_key": "n.duty_tickets", "choices": [
+      {"id": "match", "label_key": "c.duty_tickets.match", "target": "corridor", "cost_min": 10,
+       "requires": {"flag": "window_latch"}, "effects": [{"set": "torn_ticket"}], "result_key": "r.duty_tickets.match"},
+      {"id": "finish", "label_key": "c.duty_tickets.finish", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "ev_chief_round", "kind": "scene", "text_key": "n.ev_chief_round",
+     "variants": [{"when": {"flag": "chief_informed"}, "text_key": "n.ev_chief_round.informed"}],
+     "choices": [
+      {"id": "report", "label_key": "c.ev_chief_round.report", "target": "ev_chief_round", "cost_min": 10,
+       "requires": {"not_flag": "chief_informed"},
+       "effects": [{"set": "chief_informed"}, {"stat": "duty", "add": 1}, {"stat": "suspicion", "add": 2}],
+       "result_key": "r.ev_chief_round.report"},
+      {"id": "key", "label_key": "c.ev_chief_round.key", "target": "corridor", "cost_min": 10,
+       "requires": {"all": [{"flag": "chief_informed"}, {"not_flag": "baggage_key"}, {"stat": "duty", "op": ">=", "value": 6}]},
+       "effects": [{"set": "baggage_key"}], "result_key": "r.ev_chief_round.key"},
+      {"id": "key_no", "label_key": "c.ev_chief_round.key", "target": "corridor", "cost_min": 10,
+       "requires": {"all": [{"flag": "chief_informed"}, {"not_flag": "baggage_key"}, {"stat": "duty", "op": "<", "value": 6}]},
+       "result_key": "r.ev_chief_round.key_no"},
+      {"id": "fine", "label_key": "c.ev_chief_round.fine", "target": "corridor", "cost_min": 10,
+       "result_key": "r.ev_chief_round.fine"}
+    ]},
+    {"id": "ev_tea_late", "kind": "scene", "text_key": "n.ev_tea_late", "on_enter": [{"stat": "duty", "add": -2}], "choices": [
+      {"id": "sorry", "label_key": "c.sorry", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "ev_tickets_late", "kind": "scene", "text_key": "n.ev_tickets_late", "on_enter": [{"stat": "duty", "add": -2}], "choices": [
+      {"id": "sorry", "label_key": "c.sorry", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "ev_gena_cards", "kind": "scene", "text_key": "n.ev_gena_cards", "choices": [
+      {"id": "play", "label_key": "c.ev_gena_cards.play", "target": "corridor", "cost_min": 40,
+       "effects": [{"set": "gena_cards"}, {"money": 10}, {"stat": "duty", "add": -1}], "result_key": "r.ev_gena_cards.play"},
+      {"id": "decline", "label_key": "c.ev_gena_cards.decline", "target": "corridor", "cost_min": 10,
+       "result_key": "r.ev_gena_cards.decline"}
+    ]},
+    {"id": "ev_lights", "kind": "scene", "text_key": "n.ev_lights", "choices": [
+      {"id": "guard", "label_key": "c.ev_lights.guard", "target": "corridor", "cost_min": 10,
+       "effects": [{"set": "saw_searcher"}, {"stat": "trust", "add": 1}, {"stat": "suspicion", "add": 1}],
+       "result_key": "r.ev_lights.guard"},
+      {"id": "search", "label_key": "c.ev_lights.search", "target": "corridor", "cost_min": 20,
+       "requires": {"not_flag": "rudin_telegram"},
+       "effects": [{"set": "rudin_telegram"}, {"stat": "evidence", "add": 1}], "result_key": "r.ev_lights.search"},
+      {"id": "stay", "label_key": "c.ev_lights.stay", "target": "corridor", "cost_min": 10,
+       "effects": [{"stat": "trust", "add": 1}], "result_key": "r.ev_lights.stay"}
+    ]},
+    {"id": "ev_hen_restless", "kind": "scene", "text_key": "n.ev_hen_restless", "choices": [
+      {"id": "go", "label_key": "c.ev_hen_restless.go", "target": "halima_basket", "cost_min": 10},
+      {"id": "later", "label_key": "c.ev_hen_restless.later", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "ev_rudin_chat", "kind": "scene", "text_key": "n.ev_rudin_chat", "choices": [
+      {"id": "dumb", "label_key": "c.ev_rudin_chat.dumb", "target": "corridor", "cost_min": 10,
+       "effects": [{"stat": "suspicion", "add": -2}], "result_key": "r.ev_rudin_chat.dumb"},
+      {"id": "gift", "label_key": "c.ev_rudin_chat.gift", "target": "corridor", "cost_min": 10,
+       "effects": [{"money": 20}, {"stat": "suspicion", "add": -3}, {"set": "took_bribe"}], "result_key": "r.ev_rudin_chat.gift"},
+      {"id": "push", "label_key": "c.ev_rudin_chat.push", "target": "corridor", "cost_min": 10,
+       "effects": [{"stat": "suspicion", "add": 2}, {"set": "rudin_water"}], "result_key": "r.ev_rudin_chat.push"},
+      {"id": "sell", "label_key": "c.sell", "target": "e3_deal", "cost_min": 10,
+       "requires": {"flag": "prof_found"}, "effects": [{"money": 100}]}
+    ]},
+    {"id": "ev_rudin_threat", "kind": "scene", "text_key": "n.ev_rudin_threat", "choices": [
+      {"id": "promise", "label_key": "c.ev_rudin_threat.promise", "target": "corridor", "cost_min": 10,
+       "effects": [{"stat": "suspicion", "add": -2}, {"set": "promised_rudin"}], "result_key": "r.ev_rudin_threat.promise"},
+      {"id": "defy", "label_key": "c.ev_rudin_threat.defy", "target": "corridor", "cost_min": 10,
+       "effects": [{"stat": "suspicion", "add": 2}], "result_key": "r.ev_rudin_threat.defy"},
+      {"id": "sell", "label_key": "c.sell", "target": "e3_deal", "cost_min": 10,
+       "requires": {"flag": "prof_found"}, "effects": [{"money": 100}]}
+    ]},
+    {"id": "ev_rudin_attack", "kind": "scene", "text_key": "n.ev_rudin_attack", "choices": [
+      {"id": "shout", "label_key": "c.ev_rudin_attack.shout", "target": "corridor", "cost_min": 10,
+       "requires": {"flag": "gena_ally"}, "effects": [{"stat": "suspicion", "add": -3}], "result_key": "r.ev_rudin_attack.shout"},
+      {"id": "fight", "label_key": "c.ev_rudin_attack.fight", "target": "e6_rails", "cost_min": 10,
+       "requires": {"not_flag": "gena_ally"}}
+    ]},
+    {"id": "ev_junction", "kind": "scene", "text_key": "n.ev_junction", "choices": [
+      {"id": "follow", "label_key": "c.ev_junction.follow", "target": "j_taken", "cost_min": 10,
+       "requires": {"not_flag": "prof_found"}},
+      {"id": "stand_ok", "label_key": "c.ev_junction.stand", "target": "j_safe", "cost_min": 20,
+       "requires": {"all": [{"flag": "prof_found"}, {"not_flag": "hid_staff"}, {"not_flag": "hid_halima"},
+                            {"flag": "chief_informed"}, {"stat": "duty", "op": ">=", "value": 6}]},
+       "effects": [{"set": "chief_blocked"}]},
+      {"id": "stand_bad", "label_key": "c.ev_junction.stand", "target": "j_taken", "cost_min": 20,
+       "requires": {"all": [{"flag": "prof_found"}, {"not_flag": "hid_staff"}, {"not_flag": "hid_halima"},
+                            {"any": [{"not_flag": "chief_informed"}, {"stat": "duty", "op": "<", "value": 6}]}]}},
+      {"id": "gena_row", "label_key": "c.ev_junction.gena_row", "target": "j_safe", "cost_min": 20,
+       "requires": {"all": [{"flag": "prof_found"}, {"not_flag": "hid_staff"}, {"not_flag": "hid_halima"},
+                            {"flag": "gena_ally"}]},
+       "effects": [{"set": "gena_row"}]},
+      {"id": "let_ok", "label_key": "c.ev_junction.let", "target": "j_safe", "cost_min": 20,
+       "requires": {"any": [{"all": [{"flag": "hid_staff"}, {"stat": "suspicion", "op": "<", "value": 5}]},
+                            {"all": [{"flag": "hid_halima"}, {"stat": "suspicion", "op": "<", "value": 7}]}]}},
+      {"id": "let_bad", "label_key": "c.ev_junction.let", "target": "j_followed", "cost_min": 20,
+       "requires": {"all": [{"any": [{"flag": "hid_staff"}, {"flag": "hid_halima"}]},
+                            {"not": {"any": [{"all": [{"flag": "hid_staff"}, {"stat": "suspicion", "op": "<", "value": 5}]},
+                                             {"all": [{"flag": "hid_halima"}, {"stat": "suspicion", "op": "<", "value": 7}]}]}}]}},
+      {"id": "sell", "label_key": "c.ev_junction.sell", "target": "e3_deal", "cost_min": 10,
+       "requires": {"flag": "prof_found"}, "effects": [{"money": 100}]}
+    ]},
+    {"id": "j_followed", "kind": "scene", "text_key": "n.j_followed", "choices": [
+      {"id": "allies", "label_key": "c.j_followed.allies", "target": "j_safe", "cost_min": 10,
+       "requires": {"any": [{"flag": "gena_ally"}, {"all": [{"flag": "chief_informed"}, {"stat": "duty", "op": ">=", "value": 6}]}]},
+       "effects": [{"set": "allies_came"}]},
+      {"id": "alone", "label_key": "c.j_followed.alone", "target": "j_taken", "cost_min": 10,
+       "requires": {"not": {"any": [{"flag": "gena_ally"}, {"all": [{"flag": "chief_informed"}, {"stat": "duty", "op": ">=", "value": 6}]}]}}}
+    ]},
+    {"id": "j_safe", "kind": "scene", "text_key": "n.j_safe", "on_enter": [{"set": "prof_safe"}],
+     "variants": [
+       {"when": {"flag": "chief_blocked"}, "text_key": "n.j_safe.chief"},
+       {"when": {"flag": "gena_row"}, "text_key": "n.j_safe.gena"},
+       {"when": {"flag": "allies_came"}, "text_key": "n.j_safe.allies"}
+     ],
+     "choices": [
+      {"id": "on", "label_key": "c.j_safe.on", "target": "corridor", "cost_min": 10}
+    ]},
+    {"id": "j_taken", "kind": "scene", "text_key": "n.j_taken",
+     "variants": [{"when": {"flag": "reunited"}, "text_key": "n.j_taken.lola"}],
+     "choices": [
+      {"id": "keep_map", "label_key": "c.j_taken.keep_map", "target": "corridor", "cost_min": 10,
+       "requires": {"all": [{"flag": "hen_feather_map"}, {"not_flag": "map_returned"}]}, "effects": [{"set": "prof_taken"}]},
+      {"id": "end", "label_key": "c.j_taken.end", "target": "e5_junction", "cost_min": 10}
+    ]},
+    {"id": "ev_inspection", "kind": "scene", "text_key": "n.ev_inspection", "choices": [
+      {"id": "report_ok", "label_key": "c.ev_inspection.report", "target": "corridor", "cost_min": 10,
+       "requires": {"flag": "coal_done"}, "effects": [{"stat": "duty", "add": 1}], "result_key": "r.ev_inspection.ok"},
+      {"id": "report_cold", "label_key": "c.ev_inspection.report", "target": "corridor", "cost_min": 10,
+       "requires": {"not_flag": "coal_done"}, "effects": [{"stat": "duty", "add": -1}], "result_key": "r.ev_inspection.cold"}
+    ]},
+    {"id": "arrival", "kind": "scene", "text_key": "n.arrival", "late_ok": true,
+     "variants": [
+       {"when": {"flag": "prof_safe"}, "text_key": "n.arrival.safe"},
+       {"when": {"flag": "prof_taken"}, "text_key": "n.arrival.taken"}
+     ],
+     "choices": [
+      {"id": "door", "label_key": "c.arrival.door", "target": "platform", "cost_min": 10}
+    ]},
+    {"id": "platform", "kind": "scene", "text_key": "n.platform", "late_ok": true,
+     "variants": [{"when": {"flag": "bahodir_talked"}, "text_key": "n.platform.reporter"}],
+     "choices": [
+      {"id": "evidence_win", "label_key": "c.platform.evidence", "target": "e1_daybreak", "cost_min": 10,
+       "requires": {"all": [{"flag": "prof_safe"}, {"flag": "reunited"}, {"stat": "evidence", "op": ">=", "value": 3}]}},
+      {"id": "evidence", "label_key": "c.platform.evidence", "target": "e2_quiet", "cost_min": 10,
+       "requires": {"all": [{"flag": "prof_safe"},
+                            {"not": {"all": [{"flag": "reunited"}, {"stat": "evidence", "op": ">=", "value": 3}]}}]}},
+      {"id": "reporter", "label_key": "c.platform.reporter", "target": "e8_keeper", "cost_min": 10,
+       "requires": {"all": [{"flag": "hen_feather_map"}, {"not_flag": "map_returned"}, {"flag": "bahodir_talked"}]}},
+      {"id": "accuse_lola", "label_key": "c.platform.accuse_lola", "target": "e4_wrong", "cost_min": 10},
+      {"id": "accuse_gena", "label_key": "c.platform.accuse_gena", "target": "e4_wrong", "cost_min": 10},
+      {"id": "silent", "label_key": "c.platform.silent", "target": "e5_junction", "cost_min": 10,
+       "requires": {"not_flag": "prof_safe"}}
+    ]},
+    {"id": "e1_daybreak", "kind": "ending", "text_key": "n.e1_daybreak", "on_enter": [{"ending": "E1"}]},
+    {"id": "e2_quiet", "kind": "ending", "text_key": "n.e2_quiet", "on_enter": [{"ending": "E2"}]},
+    {"id": "e3_deal", "kind": "ending", "text_key": "n.e3_deal", "on_enter": [{"ending": "E3"}]},
+    {"id": "e4_wrong", "kind": "ending", "text_key": "n.e4_wrong", "on_enter": [{"ending": "E4"}]},
+    {"id": "e5_junction", "kind": "ending", "text_key": "n.e5_junction", "on_enter": [{"ending": "E5"}]},
+    {"id": "e6_rails", "kind": "ending", "text_key": "n.e6_rails", "on_enter": [{"ending": "E6"}]},
+    {"id": "e7_relieved", "kind": "ending", "text_key": "n.e7_relieved", "on_enter": [{"ending": "E7"}]},
+    {"id": "e8_keeper", "kind": "ending", "text_key": "n.e8_keeper", "on_enter": [{"ending": "E8"}]}
+  ]
+}
