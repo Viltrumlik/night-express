@@ -1,5 +1,7 @@
 # Night Express · Tungi ekspress · Ночной экспресс
 
+![Go: stdlib only](https://img.shields.io/badge/Go-stdlib%20only-00ADD8?logo=go&logoColor=white) ![endings: 8](https://img.shields.io/badge/endings-8-8B5CF6) ![tests: passing](https://img.shields.io/badge/tests-passing-2ea44f) ![languages: uz · ru · en](https://img.shields.io/badge/languages-uz%20%C2%B7%20ru%20%C2%B7%20en-orange) ![license: proprietary](https://img.shields.io/badge/license-proprietary-lightgrey)
+
 A text-only interactive-fiction mystery for the terminal. You are the conductor of carriage 7 on an overnight train across the steppe in the autumn of 1979. At 22:40 a passenger vanishes, and you have until the train pulls into Qumtepa at 06:00 to find out what happened. Every action costs minutes, the chief conductor still wants his tea and tickets, and someone on board is watching how curious you are. The night is shorter than everything there is to do, so what you read and what you skip both matter.
 
 - **Three languages, written as literature:** Uzbek (Latin script), Russian and English, switchable at any moment.
@@ -8,6 +10,39 @@ A text-only interactive-fiction mystery for the terminal. You are the conductor 
 - **Stats that bite:** Trust, Duty and Suspicion (0–10), money, and a journal of 10 clues and dozens of notes.
 - **Save/Continue** (one save slot), endings collection across runs, a hard mode without clue hints, colour that respects `NO_COLOR`, a skippable typewriter effect, and word-wrap to your terminal width.
 - **Single static binary:** Go standard library only, with the story embedded.
+
+## What it looks like
+
+The opening of a night in English (`--fast`, colour off). Type a number and press Enter; every choice shows
+what it costs on the clock.
+
+```text
+Oltinsoy, 22:00. The river breathes cold mist across the platform, and train
+No. 17, the "Southern Star", hisses like a samovar about to boil. You stand
+at the door of carriage 7 with your lamp and your punch, cap straight,
+collar buttoned, the way Chief Conductor Matvey likes it.
+
+Your passengers come out of the mist one by one. An old woman with a wicker
+basket that clucks. A young woman dragging a suitcase heavier than she is,
+who keeps glancing at the lit windows. A man in a grey coat with a thin
+leather folder, followed by a loud fellow juggling two sample cases. Last, a
+tall grey-bearded man who holds his briefcase against his chest like a
+child.
+
+The whistle blows. You have one pair of hands.
+
+🕙 22:00 · Trust 3 · Duty 5 · Suspicion 1
+ 1. Help the old woman lift her basket aboard (10 min)
+ 2. Take the young woman's heavy suitcase (10 min)
+ 3. Check the tickets of the man in grey and his loud companion (10 min)
+> _
+```
+
+## Qisqacha · Кратко
+
+**🇺🇿 O'zbekcha.** Terminalda o'ynaladigan matnli detektiv. 1979-yil kuzi, 17-raqamli «Janubiy yulduz» poyezdi. Siz 7-vagon provodnikisiz; soat 22:40 da yo'lovchi, geolog professor g'oyib bo'ladi. Poyezd 06:00 da Qumtepaga yetib keladi, har bir harakat esa daqiqalarni yeydi. 50 sahna, 10 ta iz, 8 ta yakun (bittasi sirli). O'zbek tilida boshlash: `go run ./cmd/nightexpress --lang uz --new`.
+
+**🇷🇺 Русский.** Текстовый детектив для терминала. Осень 1979 года, поезд № 17 «Южная звезда». Вы — проводник седьмого вагона; в 22:40 пропадает пассажир, профессор-геолог. Поезд прибывает в Кумтепу в 06:00, и каждое действие стоит минут. 50 сцен, 10 улик, 8 концовок (одна тайная). Запуск на русском: `go run ./cmd/nightexpress --lang ru --new`.
 
 ## The story so far (no spoilers)
 
@@ -50,7 +85,7 @@ Progress (the endings you have discovered) is kept in `~/.night-express/progress
 ## Build and run
 
 ```sh
-git clone <this repository> night-express
+git clone https://github.com/Viltrumlik/night-express.git
 cd night-express
 go build -o nightexpress ./cmd/nightexpress
 ./nightexpress                 # title screen: language, difficulty, Continue
@@ -122,6 +157,13 @@ Each line plays a whole night non-interactively. Add `--lang uz` or `--lang ru` 
 The same routes, written as readable choice ids with comments, are in `engine/playthrough_test.go`. `docs/STORY_MAP.md` lists every hidden condition.
 
 </details>
+
+## More games by Viltrumlik
+
+- [Karvonboshi](https://github.com/Viltrumlik/karvon-bot): Silk Road trading roguelite you play in a Telegram chat
+- [Last Shore](https://github.com/Viltrumlik/last-shore): pixel-art survival city-builder on a drying sea (browser)
+- [Dispatch 112](https://github.com/Viltrumlik/dispatch-112): real-time emergency-dispatch sim (terminal)
+- [Zero to Mars](https://github.com/Viltrumlik/zero-to-mars): 3D founder life-sim Telegram WebApp
 
 ## License
 
